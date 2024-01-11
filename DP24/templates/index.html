@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>{{ title }}</title>
+</head>
+<body>
+<ul>
+    <li><a href="{% url 'men:index' %}">main page</a></li>
+    {% for m in menu %}
+    {% if not forloop.last %}<li> {% else %} <li class="last"> {% endif %}
+        <a href="{% url 'men:index' %}">{{ m.title }}</a>
+    </li>
+    {% endfor %}
+</ul>
+
+<h2>{{ title }}</h2>
+<ul>
+    {% for p in posts %}
+    {% if p.is_p %}
+        <li>
+            <h2>{{ p.title }}</h2>
+            <p>{{ p.content }}</p>
+            <p><a href="{% url 'men:post' p.id %}">Read the post</a></p>
+            {% if not forloop.last %}
+            <hr>
+            {% endif %}
+        </li>
+    {% endif %}
+    {% endfor %}
+</ul>
+</body>
+</html>

@@ -1,6 +1,5 @@
 {% load static %}
 {% load men_tags %}
-<!DOCTYPE html>
 <html>
 <head>
 	<title>{{title}}</title>
@@ -15,10 +14,10 @@
 {% block mainmenu %}
 		<div class="header">
 			<ul id="mainmenu" class="mainmenu">
-			<li class="logo"><a href="{% url 'men:index' %}"><div class="logo"></div></a></li>
+			<li class="logo"><a href="{% url 'index' %}"><div class="logo"></div></a></li>
 {% for m in menu %}
 	{% if not forloop.last %}<li>{% else %}<li class="last">{% endif %}
-		<a href="{% url 'men:about'  %}">{{m.title}}</a></li>
+		<a href="{% url 'about'  %}">{{m.title}}</a></li>
 {% endfor %}
 			</ul>
 			<div class="clear"></div>
@@ -34,7 +33,7 @@
 		{% if cat_selected == 0 or cat_selected is None %}
 		<li class="selected">Categories</li>
 		{% else %}
-		<li><a href="{% url 'men:index'  %}">Categories</a></li>
+		<li><a href="{% url 'index'  %}">Categories</a></li>
 		{% endif %}
 		{% show_categories cat_selected %}
 		<li class="share">

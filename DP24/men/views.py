@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import Men
+from .models import Men, Category
 
 # Create your views here.
 
@@ -30,11 +30,6 @@ menu = [{'title': 'about us', 'url_name': 'about'},
 #
 # ]
 
-cats_db = [
-    {'id': 1, 'name': 'Actresses'},
-    {'id': 2, 'name': 'Singers'},
-    {'id': 3, 'name': 'Sportsmen'}
-]
 
 
 def index(request):
@@ -72,12 +67,14 @@ def contact(request):
 def login(request):
     return HttpResponse('login')
 
-def show_category(request, cat_id):
-    posts = Men.objects.all()
-    context = {'title': 'main page',
+def show_category(request, cat_slug):
+    category = get_object_or_404(Category, slug=cat_slug) # (first argument (Category)- choose model from which we need to get something, second argument (slug) is a criterion based on which we need to select posts/ slug = cat_slug
+    posts = Men.published.filter(cat_id=category.pk) # returns posts whose id equals slug we read above
+
+    context = {'title': f'Category: {category.name}',
                'menu': menu,
                'posts': posts,
-               'cat_selected': cat_id
+               'cat_selected': category.pk
                }
     return render(request, 'index.html', context)
 

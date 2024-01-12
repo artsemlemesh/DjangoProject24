@@ -48,3 +48,11 @@ class Category(models.Model):
 # we use __ for lookups like Category.objects.filter(pk__gte=1) and also to refer to a field of another model: Men.objects.filter(cat__slug='singers')
     def __str__(self):
         return self.name
+
+#Category.objects.filter(posts__title__contains='o') -inner join(joins 2 tables) returns name of categories of posts where title contains letter o) <QuerySet [<Category: singers>, <Category: singers>, <Category: acters>, <Category: acters>]>
+#Catogory.objects.filter(posts__title__contains='o').distinct() returns only unique names of groups <QuerySet [<Category: singers>, <Category: acters>]>
+
+    def get_absolute_url(self):
+        return reverse('category', kwargs={'cat_slug': self.slug}) # key cat_slug we take from url where <slug:cat_slug> and then in out template we can just insert in link {{ cat.get_absolute_url }}
+
+

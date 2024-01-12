@@ -20,11 +20,11 @@ class Men(models.Model):
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)
     is_published = models.BooleanField(choices=Status.choices, default=Status.DRAFT)
-    cat = models.ForeignKey('Category', on_delete=models.CASCADE) #CASCADE is not parameter() it is function, and here we pass a link on the function
+    cat = models.ForeignKey('Category', on_delete=models.CASCADE, related_name='posts') #CASCADE is not parameter() it is function, and here we pass a link on the function
     # here name is cat, but in db it is cat_id, because of ForeignKey, _id has automatically been added
     # m = Men.objects.get(pk=1)
-    # m.cat will return <Category: acters>/ m.cat.name or m.cat.slug will return name and slug of a category model respectively
-    # m.cat_id will return 1 - id of the category that this post belongs to
+    # m.cat (sql request) will return <Category: acters>/ m.cat.name or m.cat.slug will return name and slug of a category model respectively
+    # m.cat_id (no sql, just number returns) will return 1 - id of the category that this post belongs to
 
     objects = models.Manager()
     published = PublishManager()
@@ -42,6 +42,9 @@ class Men(models.Model):
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True)
     slug = models.SlugField(max_length=255, unique=True, db_index=True)
-
+# c = Category.objects.get(pk=2) - get category #2
+# c.men_set.all() - returns all the posts related to the category
+# if in the field cat we add related_name='posts', then c.men_set.all() == c.posts.all()
+# we use __ for lookups like Category.objects.filter(pk__gte=1) and also to refer to a field of another model: Men.objects.filter(cat__slug='singers')
     def __str__(self):
         return self.name

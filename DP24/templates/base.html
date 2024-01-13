@@ -30,7 +30,7 @@
 <!-- Sidebar слева -->
 	<td valign="top" class="left-chapters">
 	<ul id="leftchapters">
-		{% if cat_selected == 0 or cat_selected is None %}
+		{% if cat_selected == 0  %}
 		<li class="selected">Categories</li>
 		{% else %}
 		<li><a href="{% url 'index'  %}">Categories</a></li>
@@ -40,6 +40,8 @@
 		<p>Our channel</p>
 		<a class="share-yt" href="https://www.youtube.com/channel/UClJzWfGWuGJL2t-3dYKcHTA/playlists" target="_blank" rel="nofollow"></a>
 		</li>
+
+		<li>{% show_all_tags %}</li> <!-- after we defined tag in templatetags/men_tags.py we need to insert the name of the tag here -->
 	</ul>
 </td>
 <!-- Конец Sidebar'а -->

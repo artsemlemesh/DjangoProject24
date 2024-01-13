@@ -3,7 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
-from .models import Men, Category
+from .models import Men, Category, TagPost
 
 # Create your views here.
 
@@ -95,3 +95,15 @@ def show_category(request, cat_slug):
 
 def page_not_found(request, exception):     # connected to handler404 in urls.py
     return HttpResponseNotFound('<h1>PAGE NOT FOUND</h1>')
+
+def show_tag_postlist(request, tag_slug):
+    tag = get_object_or_404(TagPost, slug=tag_slug)
+    posts = tag.tags.filter(is_published=Men.Status.PUBLISHED)
+    context = {
+        'title': f'Tag: {tag.tag}',
+        'menu': menu,
+        'posts': posts,
+        'cat_selected': None
+    }
+
+    return render(request, 'index.html', context)

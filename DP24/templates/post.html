@@ -1,5 +1,19 @@
 {% extends 'base.html' %}
 
+{% block breadcrumbs %}<!-- ths  block displays all the tags that current post belongs to-->
+<!--tags-->
+{% with post.tags.all as tags %} <!-- post.tags.all retrieves all the tags associated with the current post instance through the relationship established between the Men and TagPost models -->
+{% if tags %}
+<ul class="tags-list">
+    <li>Tags: </li>
+    {% for t in tags %}
+    <li><a href="{% url 'tag' t.slug %}" >{{ t.tag }}</a></li> <!-- again get_absolute_url throws an error -->
+    {% endfor %}
+</ul>
+{% endif %}
+{% endwith %}
+{% endblock %}
+
 {% block content %}
 <h1>{{ post.title }}</h1>
 

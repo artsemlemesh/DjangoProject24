@@ -57,9 +57,9 @@ class Category(models.Model):
     def get_absolute_url(self):
         return reverse('category', kwargs={'cat_slug': self.slug}) # key cat_slug we take from url where <slug:cat_slug> and then in out template we can just insert in link {{ cat.get_absolute_url }}
 
-# class TagPost(models.Model):
-#     tag = models.CharField(max_length=100, db_index=True)
-#     slug = models.SlugField(max_length=255, unique=True, db_index=True)
+class TagPost(models.Model):
+    tag = models.CharField(max_length=100, db_index=True)
+    slug = models.SlugField(max_length=255, unique=True, db_index=True)
 
     def __str__(self):
         return self.tag

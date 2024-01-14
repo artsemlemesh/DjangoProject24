@@ -71,6 +71,7 @@ class TagPost(models.Model):
 class Wife(models.Model):
     name = models.CharField(max_length=100)
     age = models.IntegerField(null=True)
+    m_count = models.IntegerField(blank=True, default=0)
 
     def __str__(self):
         return self.name
@@ -95,3 +96,8 @@ class Wife(models.Model):
 #c3.posts.exists() -if nothing returns False, if something returns True
 
 # to call custom shell: python3 manage.py shell_plus --print-sql
+
+#F string and annotate
+#w = Wife.objects.all().annotate(is_married=Value(True))
+#w1 = Wife.objects.all().annotate(work_age=F('age')-10)
+

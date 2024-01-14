@@ -26,6 +26,7 @@ SECRET_KEY = "django-insecure-gpgxu#%d@$6uiv=f&id6%%$qvwk%!5b5rt9=rh%b8-60+not2h
 DEBUG = True
 
 ALLOWED_HOSTS = ['127.0.0.1']
+INTERNAL_IPS = ['127.0.0.1']
 
 
 # Application definition
@@ -40,6 +41,8 @@ INSTALLED_APPS = [
 
     'django_extensions',
 
+    'debug_toolbar',
+
     'men',
 ]
 
@@ -51,6 +54,7 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
 
 ROOT_URLCONF = "DP24.urls"

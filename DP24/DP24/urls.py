@@ -22,6 +22,10 @@ from men.views import page_not_found
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('men/', include('men.urls')),
+    path('__debug__/', include('debug_toolbar.urls')),
 ]
 
 handler404 = page_not_found  #when DEBUG=False and address not found, user-friendly page will be displayed
+
+admin.site.site_header = 'Mike\'s webpanel' # changes the name of the django admin panel
+admin.site.index_title = 'Test website'

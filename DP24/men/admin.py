@@ -26,6 +26,12 @@ class MarriedFilter(admin.SimpleListFilter): #before the main class we should wr
 
 @admin.register(Men)
 class MenAdmin(admin.ModelAdmin):
+    #fields = ['title', 'slug', 'content', 'cat'] #displays only these fields in admin panel
+    #exclude = ['slug'] #excludes these fields
+    #readonly_fields = ['slug']
+    prepopulated_fields = {'slug': ('title', )} # creates slug on the go while typing title filed
+    filter_horizontal = ['tags'] # for many-to-many fields only, changes design of a filter table
+    #filter_vertical = ['tags'] #the same but vertical
     list_display = ('title', 'time_created', 'is_published', 'cat', 'brief_info')
     list_display_links = ('title',) # fields that have links, by defauld only id field is clickable
     ordering = ['time_created', 'title'] # can wrap in both tuple or list/ sorts posts by time_created, for those whose time is the same sorts by next field ( title )

@@ -3,6 +3,7 @@ from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse
 from django.template.defaultfilters import slugify
 
+from .forms import AddPostForm
 from .models import Men, Category, TagPost
 
 # Create your views here.
@@ -44,7 +45,13 @@ def about(request):
     return render(request, 'about.html', {'title':'about', 'menu': menu})
 
 def addpage(request):
-    return HttpResponse('addpage')
+    form = AddPostForm()
+    context = {
+        'menu': menu,
+        'title': 'add page',
+        'form': form
+    }
+    return render(request, 'addpage.html', context)
 
 def contact(request):
     return HttpResponse('contact')

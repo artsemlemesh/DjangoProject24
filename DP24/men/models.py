@@ -1,4 +1,5 @@
 from django.db import models
+from django.template.defaultfilters import slugify
 from django.urls import reverse
 
 
@@ -43,6 +44,11 @@ class Men(models.Model):
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug}) # key post_slug we take from urls where <slug:post_slug>
 
+    # def save(self, *args, **kwargs): # save is an object of class Men, when it gets called it applies to the current post
+    #     self.slug = slugify(self.title) # we can determine attribute slug for a current post here
+    #     super().save(*args, **kwargs)
+        #slugify lets create the slug based on the title
+    #!!!!this is one of the options to create slug field automatically, I use better one, In file admin.py for the model i added field: prepopulated_fields = {'slug': ('title', )}
 
 class Category(models.Model):
     name = models.CharField(max_length=100, db_index=True, verbose_name='name_of_category')

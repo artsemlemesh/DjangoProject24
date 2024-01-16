@@ -45,7 +45,17 @@ def about(request):
     return render(request, 'about.html', {'title':'about', 'menu': menu})
 
 def addpage(request):
-    form = AddPostForm()
+    if request.method == 'POST':# once the user clicked the button 'enter or post' then form is being filled by entered data/also browser checks the correctness of the data
+        form = AddPostForm(request.POST)
+        if form.is_valid():# the server validates the data(step 2)
+            # print(form.cleaned_data) # displays dictionary type trusted data
+            try:
+                Men.objects.create(**form.cleaned_data)# ** unpacks dictionary cleaned_data#trying to save the cleaned data to the db
+                return redirect('index')#after success get redirected to the home page
+            except:
+                form.add_error(None, 'creation post error')#if not succeeded then display errors
+    else:
+        form = AddPostForm()# when form displays first time, then method GET and empty form
     context = {
         'menu': menu,
         'title': 'add page',

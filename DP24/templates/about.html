@@ -2,4 +2,12 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-{% endblock %}
+<form action="" method="post" enctype="multipart/form-data">  <!--this form is for uploading files on server, attr enctype is compulsory, othrewise nothing is gonna work -->
+    {% csrf_token %} <!--compulsory if method POST-->
+    {{ form.as_p }}
+<!--    <p><input type="file" name="file_upload"></p> because we redefined form for UploadFileForm we comment this line and replace it by {{ form.as_p }} if a form is connected with model we write a bunch of lines, if not then just form.as_p-->
+    <p><button type="submit">Send</button></p> <!-- minimum for setting up a form for uploading data to a server -->
+
+
+</form>
+    {% endblock %}

@@ -27,7 +27,7 @@ class MarriedFilter(admin.SimpleListFilter): #before the main class we should wr
 
 @admin.register(Men)
 class MenAdmin(admin.ModelAdmin):
-    fields = ['title', 'slug', 'content', 'photo', 'post_photo' , 'cat', 'wife', 'tags'] #displays only these fields in admin panel
+    fields = ['title', 'slug', 'content', 'photo', 'post_photo' , 'is_published', 'cat', 'wife', 'tags'] #displays only these fields in admin panel
     #exclude = ['slug'] #excludes these fields
     readonly_fields = ['post_photo'] # to see in admin panel in post detail uploaded picture
     prepopulated_fields = {'slug': ('title', )} # creates slug on the go while typing title filed

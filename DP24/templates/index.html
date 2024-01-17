@@ -9,6 +9,9 @@
 	<p class="first">Category: {{ p.cat.name }}</p>
 	<p class="last">Date: {{ p.time_updated|date:'d-m-Y H:i:s' }}</p>
 		</div>
+			{% if p.photo %} <!-- this block added little picture preview of each post on the main page -->
+				<p> <img class="img-article-left thumb" src="{{ p.photo.url }}"> </p>
+			{% endif %}
 				<h2>{{p.title}}</h2>
     {% autoescape off %}
 	{{p.content|linebreaks|truncatewords:40}}

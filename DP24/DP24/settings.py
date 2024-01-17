@@ -128,6 +128,9 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
 
+MEDIA_ROOT = BASE_DIR / 'media' #creates one directory for all the media files , instead of two directories 'uploads'-forms upload and 'upload_models'-model upload, we have 'media' for any files and ways of upload
+MEDIA_URL = '/media/'#to display pictures
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 

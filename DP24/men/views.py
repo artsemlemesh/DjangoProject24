@@ -4,7 +4,7 @@ from django.urls import reverse
 from django.template.defaultfilters import slugify
 
 from .forms import AddPostForm, UploadFileForm
-from .models import Men, Category, TagPost
+from .models import Men, Category, TagPost, UploadFiles
 
 # Create your views here.
 
@@ -42,10 +42,10 @@ def show_post(request, post_slug):
     return render(request, 'post.html', context)
 
 
-def handle_uploaded_file(f): # function from django documentation, f is an object that we are uploading
-    with open(f'uploads/{f.name}', "wb+") as destination:
-        for chunk in f.chunks():
-            destination.write(chunk)
+# def handle_uploaded_file(f): # function from django documentation, f is an object that we are uploading
+#     with open(f'uploads/{f.name}', "wb+") as destination:
+#         for chunk in f.chunks():
+#             destination.write(chunk)
 
 
 def about(request):
@@ -53,15 +53,16 @@ def about(request):
         form = UploadFileForm(request.POST, request.FILES)# because we upload files we need to write FILES here
         # handle_uploaded_file(request.FILES['file_upload']) #key file_upload appeared because we defined the class='file_upload' in our html template about.html /name is our key:     <p><input type="file" name="file_upload"></p>
         if form.is_valid(): # checks wheter the fields are correct
-            handle_uploaded_file(form.cleaned_data['file']) # file is the name of the field in the UploadFileForm
-
+            # handle_uploaded_file(form.cleaned_data['file']) # file is the name of the field in the UploadFileForm//now we comment it because we upload via models and use different class for it
+            fp = UploadFiles(file=form.cleaned_data['file'])
+            fp.save()#these two lines fp replaced the function: handle_uploaded_file # formbased upload replaced by modelbased upload
     else:
         form = UploadFileForm()
     return render(request, 'about.html', {'title':'about', 'menu': menu, 'form': form}) #also added form attribute
 
 def addpage(request):
     if request.method == 'POST':# once the user clicked the button 'enter or post' then form is being filled by entered data/also browser checks the correctness of the data
-        form = AddPostForm(request.POST)
+        form = AddPostForm(request.POST, request.FILES)#to save not only text but photos or files we need to add request.FILES
         if form.is_valid():# the server validates the data(step 2)
             # print(form.cleaned_data) # displays dictionary type trusted data
             # try: # after we wrote class Meta in form AddPostForm we have got a new method 'save'... so now we change block try: except:

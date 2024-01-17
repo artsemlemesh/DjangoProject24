@@ -17,6 +17,8 @@ class Men(models.Model):
 
     title = models.CharField(max_length=255, verbose_name='My_title') # verbose_name changes the name of the columns in django admin panel
     slug = models.SlugField(max_length=255, unique=True, db_index=True)#db_index displays articles faster
+    photo = models.ImageField(upload_to='photos/%Y/%m/%d', default=None,
+                              blank=True, null=True, verbose_name='Photo')#we define photo field later than others, and in order to successfully apply migrations we need null=True
     content = models.TextField(blank=True)
     time_created = models.DateTimeField(auto_now_add=True)
     time_updated = models.DateTimeField(auto_now=True)
@@ -122,3 +124,9 @@ class Wife(models.Model):
 #w = Wife.objects.aggregate(res=Max('age')-Min('age')) # returns age difference btw max and min
 
 #m = Men.objects.values('title', 'cat__name', 'wife__name').get(pk=1) # returns only values of these three columns, __ refers to another class (inner join)
+
+
+#upload files via models, previousely we did via forms into directory uploads
+
+class UploadFiles(models.Model): #upload via models rather than forms allowed us to upload the same file many times(instead of just rewriting it) it adds unique name in case of uploading the same file name
+    file = models.FileField(upload_to='uploads_model')

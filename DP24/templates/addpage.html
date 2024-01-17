@@ -2,7 +2,7 @@
 
 {% block content %}
 <h1>{{ title }}</h1>
-<form action="" method="post">
+<form action="" method="post" enctype="multipart/form-data"> <!-- after we add any files in our form we have to add this attribute: enctype-->
     {% csrf_token %}    <!-- if method='post' then write csrf_token -->
 <!--    {{ form.as_p }}-->
 <!--    manualy writes fields as form.as_p does-->

@@ -44,7 +44,7 @@ class AddPostForm(forms.ModelForm): # we used forms.Form, if using ModelForm the
 
     class Meta:
         model = Men
-        fields = ['title', 'slug', 'content', 'is_published', 'cat', 'wife', 'tags']
+        fields = ['title', 'slug', 'content', 'photo', 'is_published', 'cat', 'wife', 'tags']
         widgets = { #we need to redefine the widgets we wrote earlier, because we commented those fields above
             'title': forms.TextInput(attrs={'class': 'form-input'}),
             'content': forms.Textarea(attrs={'cols': 50, 'rows': 5}),

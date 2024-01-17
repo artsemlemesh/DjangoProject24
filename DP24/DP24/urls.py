@@ -14,9 +14,11 @@ Including another URLconf
     1. Import the include() function: from django.urls import include, path
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
+from django.conf.urls.static import static
 from django.contrib import admin
 from django.urls import path, include
 
+from DP24 import settings
 from men.views import page_not_found
 
 urlpatterns = [
@@ -24,6 +26,10 @@ urlpatterns = [
     path('men/', include('men.urls')),
     path('__debug__/', include('debug_toolbar.urls')),
 ]
+
+if settings.DEBUG: # setting the address to display uploaded picture on the page
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
 
 handler404 = page_not_found  #when DEBUG=False and address not found, user-friendly page will be displayed
 

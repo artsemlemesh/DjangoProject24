@@ -1,4 +1,5 @@
 from django.contrib import admin, messages
+from django.utils.safestring import mark_safe
 
 from .models import Men, TagPost, Wife, Category
 
@@ -26,13 +27,13 @@ class MarriedFilter(admin.SimpleListFilter): #before the main class we should wr
 
 @admin.register(Men)
 class MenAdmin(admin.ModelAdmin):
-    #fields = ['title', 'slug', 'content', 'cat'] #displays only these fields in admin panel
+    fields = ['title', 'slug', 'content', 'photo', 'post_photo' , 'cat', 'wife', 'tags'] #displays only these fields in admin panel
     #exclude = ['slug'] #excludes these fields
-    #readonly_fields = ['slug']
+    readonly_fields = ['post_photo'] # to see in admin panel in post detail uploaded picture
     prepopulated_fields = {'slug': ('title', )} # creates slug on the go while typing title filed
     filter_horizontal = ['tags'] # for many-to-many fields only, changes design of a filter table
     #filter_vertical = ['tags'] #the same but vertical
-    list_display = ('title', 'time_created', 'is_published', 'cat', 'brief_info')
+    list_display = ('title', 'post_photo', 'time_created', 'is_published', 'cat', 'brief_info')
     list_display_links = ('title',) # fields that have links, by defauld only id field is clickable
     ordering = ['time_created', 'title'] # can wrap in both tuple or list/ sorts posts by time_created, for those whose time is the same sorts by next field ( title )
     list_editable = ('is_published',) #should put comma at the end to make it to be tuple (list_editable) returns a tuple of fields that can be edited in django admin panel
@@ -44,6 +45,13 @@ class MenAdmin(admin.ModelAdmin):
     search_fields = ['title', 'cat__name'] #adds search panel and looks in titles field, add cat__name not cat(not a field, but a key), __ can add lookups or fields / searches in two fields
     list_filter = [MarriedFilter, 'cat__name', 'is_published'] #adds filtration table to the right side
     # to include our custom filter class we just need to add it to list filter exactly like shown above(without brackets, just send the link to it)
+    save_on_top = True #adds extra button save to the top of the page
+
+    @admin.display(description='image', ordering='content')
+    def post_photo(self, men: Men):
+        if men.photo:
+            return mark_safe(f'<img src="{men.photo.url}" width=50>') # mark_safe helps to properly display tags
+        return 'no photo'
     @admin.display(description='brief_info', ordering='content') #ordering=sort, can use only fields from db, brief_info does not exist in db, so we can link ordering to some other fields
     def brief_info(self, men: Men):
         return f'Description {len(men.content)} symbols'

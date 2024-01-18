@@ -8,6 +8,7 @@ menu = [{'title': 'about us', 'url_name': 'about'},
 
 
 class DataMixin:
+    paginate_by = 3
     title_page = None
     cat_selected = None#default
     extra_context = {}

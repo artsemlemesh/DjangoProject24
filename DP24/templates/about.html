@@ -7,7 +7,21 @@
     {{ form.as_p }}
 <!--    <p><input type="file" name="file_upload"></p> because we redefined form for UploadFileForm we comment this line and replace it by {{ form.as_p }} if a form is connected with model we write a bunch of lines, if not then just form.as_p-->
     <p><button type="submit">Send</button></p> <!-- minimum for setting up a form for uploading data to a server -->
-
-
 </form>
+
+<!--added 3 lines below with pagination-->
+    {% for item in page_obj %}
+    <p>{{ item.pk }}: {{ item.title }}</p> <!-- item is an object of class Men, so we can use item.title .... -->
+    {% endfor %}
+
+<!-- block <nav> is to display pagination, need to check line for// '?page= 'number'' adds in a browser line to display different pages  -->
+    <nav>
+        <ul>
+            {% for p in page_obj.paginator.page_range %}
+            <li>
+                <a href="?page={{ p }}">{{ p }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </nav>
     {% endblock %}

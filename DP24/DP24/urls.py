@@ -24,6 +24,8 @@ from men.views import page_not_found
 urlpatterns = [
     path("admin/", admin.site.urls),
     path('men/', include('men.urls')),
+    path('users/', include('users.urls', namespace='users')),#'users:login' #namespace is the same as # app_name= 'users', if there are the same names of urls in different apps then it wont be confused
+
     path('__debug__/', include('debug_toolbar.urls')),
 ]
 

@@ -1,3 +1,4 @@
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404
 from django.urls import reverse, reverse_lazy
@@ -38,6 +39,7 @@ class MenHome(DataMixin, ListView): # CBV version of function based index view
     context_object_name = 'posts' # redetermine default name, which is 'object_list'
     title_page = 'main page'#title_page is our own field, we have to define it in mixins
     cat_selected = 0
+    # paginate_by = 3 #pagination for class based views (also add code in templates)//moved paginate_by = 3 to mixin
     # extra_context = { #to display menu fields (in our case) and some other things # can only convey static data that already exist, for dynamic data we use def get_context_data(self):
     #     'title': 'main page',
     #     'menu': menu,
@@ -93,17 +95,26 @@ class ShowPost(DataMixin, DetailView): #added mixin DataMixin
 #             destination.write(chunk)
 
 
+# def about(request): #for pagination we wrote func about again below
+#     if request.method == 'POST':
+#         form = UploadFileForm(request.POST, request.FILES)# because we upload files we need to write FILES here
+#         # handle_uploaded_file(request.FILES['file_upload']) #key file_upload appeared because we defined the class='file_upload' in our html template about.html /name is our key:     <p><input type="file" name="file_upload"></p>
+#         if form.is_valid(): # checks wheter the fields are correct
+#             # handle_uploaded_file(form.cleaned_data['file']) # file is the name of the field in the UploadFileForm//now we comment it because we upload via models and use different class for it
+#             fp = UploadFiles(file=form.cleaned_data['file'])
+#             fp.save()#these two lines fp replaced the function: handle_uploaded_file # formbased upload replaced by modelbased upload
+#     else:
+#         form = UploadFileForm()
+#     return render(request, 'about.html', {'title':'about', 'form': form}) #also added form attribute
+
+
 def about(request):
-    if request.method == 'POST':
-        form = UploadFileForm(request.POST, request.FILES)# because we upload files we need to write FILES here
-        # handle_uploaded_file(request.FILES['file_upload']) #key file_upload appeared because we defined the class='file_upload' in our html template about.html /name is our key:     <p><input type="file" name="file_upload"></p>
-        if form.is_valid(): # checks wheter the fields are correct
-            # handle_uploaded_file(form.cleaned_data['file']) # file is the name of the field in the UploadFileForm//now we comment it because we upload via models and use different class for it
-            fp = UploadFiles(file=form.cleaned_data['file'])
-            fp.save()#these two lines fp replaced the function: handle_uploaded_file # formbased upload replaced by modelbased upload
-    else:
-        form = UploadFileForm()
-    return render(request, 'about.html', {'title':'about', 'form': form}) #also added form attribute
+    contact_list = Men.published.all()
+    paginator = Paginator(contact_list, 3)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+    return render(request, 'about.html', {'title': 'about', 'page_obj': page_obj})
+
 
 # def addpage(request): #also replaced by AddPage
 #     if request.method == 'POST':# once the user clicked the button 'enter or post' then form is being filled by entered data/also browser checks the correctness of the data
@@ -276,3 +287,4 @@ class TagPostList(DataMixin, ListView):
         # context['menu'] = menu
         # context['cat_selected'] = None
         # return context
+

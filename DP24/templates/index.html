@@ -24,3 +24,34 @@
 {% endblock %}
 
 
+{% block navigation %}
+{% if page_obj.has_other_pages %} <!-- if only one page then the number wont be displayed -->
+	<nav class="list-pages">
+        <ul>
+
+			{% if page_obj.has_previous %}<!-- this block displays < sign, to move one page to the left -->
+			<li class="page-num">
+				<a href="?page={{ page_obj.previous_page_number }}">&lt;</a>
+			</li>
+			{% endif %}
+
+            {% for p in paginator.page_range %}
+			{% if page_obj.number == p %} <!--1 for chosen page it displays just a number, instead of a number in a circle, then we can understand on what page we are on -->
+			<li class="page-num page-num-selected"> {{ p }}</li><!-- 1 -->
+			{% elif p >= page_obj.number|add:-2 and p <= page_obj.number|add:2 %} <!-- in case when too many pages, with the tag 'add' it displays only two nearest pages to the right and to the left -->
+            <li class="page-num">
+                <a href="?page={{ p }}">{{ p }}</a>
+            </li>
+			{% endif %}
+            {% endfor %}
+
+			{% if page_obj.has_next %}<!-- this block displays > sign, to move one page to the right -->
+			<li class="page-num">
+				<a href="?page={{ page_obj.next_page_number }}">&gt;</a>
+			</li>
+			{% endif %}
+
+        </ul>
+    </nav>
+{% endif %}
+{% endblock %}

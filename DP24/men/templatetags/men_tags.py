@@ -2,11 +2,18 @@ from django import template
 import men.views as views
 from men.models import Category, TagPost
 from django.db.models import Count
+
+from men.utils import menu
+
 register = template.Library()
 
 # @register.simple_tag(name='getcats')
 # def get_categories():
 #     return views.cats_db
+
+@register.simple_tag# use this tag to display menu in authorization template, then we pass it to base.html
+def get_menu():
+    return menu
 
 @register.inclusion_tag('list_categories.html')# this tag is to mark a category a selected person belongs to( category turns blue)
 def show_categories(cat_selected=0):

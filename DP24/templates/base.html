@@ -20,7 +20,7 @@
 	<li><a href="{% url m.url_name  %}">{{m.title}}</a></li>
 {% endfor %}
 {% if user.is_authenticated %}<!-- because in settings in context_processors we have auth, so then it passes user here(kinda built-in method) -->
-	<li class="last">{{ user.username }}<a href="{% url 'users:logout' %}"> | logout</a> </li> <!-- if user logged in then it displays the name of the user and button logout -->
+	<li class="last"><a href="{% url 'users:profile' %}">{{ user.username }}</a><a href="{% url 'users:logout' %}"> | logout</a> </li> <!-- if user logged in then it displays the name of the user and button logout -->
 {% else %}
 	<li class="last"><a href="{% url 'users:login' %}">login</a> | <a href="{% url 'users:register' %}">Register</a></li><!-- if user isnt logged in then it displays login | register -->
 {% endif %}

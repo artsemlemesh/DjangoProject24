@@ -12,6 +12,7 @@ https://docs.djangoproject.com/en/4.2/ref/settings/
 import os.path
 from pathlib import Path
 
+
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
 
@@ -146,3 +147,9 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 LOGIN_REDIRECT_URL = 'index'
 LOGOUT_REDIRECT_URL = 'index'
 LOGIN_URL = 'users:login' #if i am not logged in and try to go to the @login_required page, i will be redirected to the users:login page
+
+#the field below is for email registration
+AUTHENTICATION_BACKENDS = [
+    "django.contrib.auth.backends.ModelBackend",#this built in backend authenticate by username and password
+    'users.authentication.EmailAuthBackend',# our own created backend that authorises by email
+]

@@ -1,3 +1,5 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404
@@ -107,7 +109,7 @@ class ShowPost(DataMixin, DetailView): #added mixin DataMixin
 #         form = UploadFileForm()
 #     return render(request, 'about.html', {'title':'about', 'form': form}) #also added form attribute
 
-
+@login_required #we use this decorator for function based views, and LoginRequiredMixin for class based views
 def about(request):
     contact_list = Men.published.all()
     paginator = Paginator(contact_list, 3)
@@ -137,8 +139,8 @@ def about(request):
 #     }
 #     return render(request, 'addpage.html', context)
 #
-
-class AddPage(DataMixin, CreateView): #replace FormView on CreateView and remove method form_valid, because it already exists in CreateView
+#LoginRequiredMixin for class based views, to restrict users to visit a certain page(only add LoginRequiredMixin and nothing else)
+class AddPage(LoginRequiredMixin, DataMixin, CreateView): #replace FormView on CreateView and remove method form_valid, because it already exists in CreateView
     form_class = AddPostForm #link on the form class
     #instead of form_class we can write model=Men and fields = ['write fields we want to be displayed, make sure to include all compulsory fields']
     template_name = 'addpage.html'
@@ -146,6 +148,7 @@ class AddPage(DataMixin, CreateView): #replace FormView on CreateView and remove
     success_url = reverse_lazy('index')# the same as reverse, builds the url only when its necessary, not immediately like function reverse does. it helps to avoid errors
     #to add menu fields we need extra_context
     title_page = 'add article' #this line defined in mixins, put it here instead of extra_context
+    #login_url = '/admin/'#after we added LoginRequiredMixin, we have this attribute, once user clicked on the restricted page, he will be redirected to the specified page
     # extra_context = {
     #     'menu': menu,
     #     'title': 'add article'
@@ -156,6 +159,13 @@ class AddPage(DataMixin, CreateView): #replace FormView on CreateView and remove
     # def form_valid(self, form):#remove this method after replacing FormView on CreateView, it already exists in CreateView
     #     form.save()
     #     return super().form_valid(form)
+
+
+    #automatically connect an author who created an article with the article itself
+    def form_valid(self, form):#form it's a verified and filled form of adding a new article (add_page)
+        w = form.save(commit=False)#create an object of a new article for a db, but will not write it to the db (commit= False)
+        w.author = self.request.user#current logged in user. when a user is logged in, addpage kicks in and connects him to the page he created
+        return super().form_valid(form)#to save everything
 
 
 class UpdatePage(DataMixin, UpdateView):

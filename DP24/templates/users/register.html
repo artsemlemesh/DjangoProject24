@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h1>Register</h1>
+<form method="post">
+    {% csrf_token %}
+    <input type="hidden" name="next" value="{{ next }}"/> <!-- hidden button, logged in the user to the desired page after logging in -->
+    {{ form.as_p }}
+    <p><button type="submit">Register</button></p>
+
+</form>
+
+{% block content %}

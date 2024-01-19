@@ -137,3 +137,12 @@ MEDIA_URL = '/media/'#to display pictures
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+# LOGIN_REDIRECT_URL = url redirect after successfull authorization
+# LOGIN_URL = url redirect of an unauthorized user in an attempt to visit restricted page
+# LOGOUT_REDIRECT_URL = url on which user is redirected after being logged in
+
+
+LOGIN_REDIRECT_URL = 'index'
+LOGOUT_REDIRECT_URL = 'index'
+LOGIN_URL = 'users:login' #if i am not logged in and try to go to the @login_required page, i will be redirected to the users:login page

@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from django.db import models
 from django.template.defaultfilters import slugify
 from django.urls import reverse
@@ -31,7 +32,7 @@ class Men(models.Model):
     # m = Men.objects.get(pk=1)
     # m.cat (sql request) will return <Category: acters>/ m.cat.name or m.cat.slug will return name and slug of a category model respectively
     # m.cat_id (no sql, just number returns) will return 1 - id of the category that this post belongs to
-
+    author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='posts', null=True, default=None) #field 'author' connects a certain article with an author who created it #SET_NULL-if we delete author then its articles will have Null,
     objects = models.Manager()
     published = PublishManager()
     def __str__(self):

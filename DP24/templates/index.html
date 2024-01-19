@@ -6,7 +6,7 @@
 <ul class="list-articles">
 	{% for p in posts %}
 		<li><div class="article-panel">
-	<p class="first">Category: {{ p.cat.name }}</p>
+	<p class="first">Category: {{ p.cat.name }} | author: {{ p.author.username|default:'unknown' }}</p> <!-- added display of author later with LoginRequiredMixin-->
 	<p class="last">Date: {{ p.time_updated|date:'d-m-Y H:i:s' }}</p>
 		</div>
 			{% if p.photo %} <!-- this block added little picture preview of each post on the main page -->

@@ -25,3 +25,15 @@ class RegisterUserForm(forms.ModelForm):
         labels = {
             'email': 'e-mail',
         }
+
+    def clean_password2(self): #checks whether two passwords coinside
+        cd = self.cleaned_data #cleadned_data is a dictionary that contains validated(checked) fields
+        if cd['password'] != cd['password2']:
+            raise forms.ValidationError('passwords aren\'t equal')
+        return cd['password']
+
+    def clean_email(self):#checks uniqueness of an email a new user is trying to register
+        email = self.cleaned_data['email'] #gets already checked email from the form
+        if get_user_model().objects.filter(email=email).exists():#checks whether it is in db
+            raise forms.ValidationError('email already exists')#error if yes
+        return email#if it is unique then returns it

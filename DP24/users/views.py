@@ -23,7 +23,17 @@ def logout_user(request): #used built in LogoutView
 
 
 def register(request):
-    form = RegisterUserForm
+    if request.method == 'POST':   #if user submits the form
+        form = RegisterUserForm(request.POST)#create form with data that user filled
+        if form.is_valid():#if the data is correct
+            user = form.save(commit=False)#dont yet save to the db
+            user.set_password(form.cleaned_data['password'])#set_password encrypts our password and puts it in attribute 'password', in brackets we write which password we want to be encrypted (form.cleaned_data['password'])
+            user.save()#save the user to the db
+            return render(request, 'users/register_done.html')
+    else:
+        form = RegisterUserForm()
+
+    return render(request, 'users/register.html', {'form': form})
 
 
 

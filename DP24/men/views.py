@@ -1,5 +1,5 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth.mixins import LoginRequiredMixin
+from django.contrib.auth.decorators import login_required, permission_required
+from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, HttpResponseNotFound, Http404
@@ -140,7 +140,9 @@ def about(request):
 #     return render(request, 'addpage.html', context)
 #
 #LoginRequiredMixin for class based views, to restrict users to visit a certain page(only add LoginRequiredMixin and nothing else)
-class AddPage(LoginRequiredMixin, DataMixin, CreateView): #replace FormView on CreateView and remove method form_valid, because it already exists in CreateView
+class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView): #replace FormView on CreateView and remove method form_valid, because it already exists in CreateView
+    #PermissionRequiredMixin lets users only with certain permissions in a group do a certain things. For example: if a user from a certain group doesnt have permission on adding new posts, he wont be able to do so
+    #after we added PermissionRequiredMixin, here we have new attribute: permission_required=
     form_class = AddPostForm #link on the form class
     #instead of form_class we can write model=Men and fields = ['write fields we want to be displayed, make sure to include all compulsory fields']
     template_name = 'addpage.html'
@@ -148,6 +150,7 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView): #replace FormView on C
     success_url = reverse_lazy('index')# the same as reverse, builds the url only when its necessary, not immediately like function reverse does. it helps to avoid errors
     #to add menu fields we need extra_context
     title_page = 'add article' #this line defined in mixins, put it here instead of extra_context
+    permission_required = 'men.add_men'#<app>.<action>_<table> # 'men'-name of the application, '.', 'add'-permission itself. 'men'-name of the table that permission is connected with
     #login_url = '/admin/'#after we added LoginRequiredMixin, we have this attribute, once user clicked on the restricted page, he will be redirected to the specified page
     # extra_context = {
     #     'menu': menu,
@@ -168,13 +171,14 @@ class AddPage(LoginRequiredMixin, DataMixin, CreateView): #replace FormView on C
         return super().form_valid(form)#to save everything
 
 
-class UpdatePage(DataMixin, UpdateView):
+class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     #we used 'model' and 'fields' because we didn't define form_class before
     model = Men
     fields = ['title', 'content', 'photo', 'is_published', 'cat']
     template_name = 'addpage.html'
     success_url = reverse_lazy('index')
     title_page = 'edit article'
+    permission_required = 'men.change_men'
     # extra_context = {
     #     'menu': menu,
     #     'title': 'Alter the article'
@@ -208,8 +212,8 @@ class DeletePage(DeleteView):
 #         }
 #         return render(request, 'addpage.html', context)
 
-
-
+#for the FBV permission is given this way: using decorators, where 'perm' is for 'permission_required', and 'raise exception' to throw 403 error when a user is trying to enter the restricted page
+@permission_required(perm='men.view_men', raise_exception=True)
 def contact(request):
     return HttpResponse('contact')
 
@@ -297,4 +301,9 @@ class TagPostList(DataMixin, ListView):
         # context['menu'] = menu
         # context['cat_selected'] = None
         # return context
+
+
+
+
+
 

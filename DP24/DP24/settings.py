@@ -153,3 +153,23 @@ AUTHENTICATION_BACKENDS = [
     "django.contrib.auth.backends.ModelBackend",#this built in backend authenticate by username and password
     'users.authentication.EmailAuthBackend',# our own created backend that authorises by email
 ]
+
+
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend" #this line is for sending emails (signals, password resets, etc...)
+
+#the lines below is for password reset by email, it finally works perfectly and sends email on my mail
+EMAIL_HOST = 'smtp.yandex.ru'
+EMAIL_PORT = 465
+EMAIL_HOST_USER = 'artem.lems@yandex.ru'
+EMAIL_HOST_PASSWORD = 'ceflmpevwhymjkys'
+EMAIL_USE_SSL = True
+
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER#this line is important for sending messages such as password reset(doesnt work without it)
+SERVER_EMAIL = EMAIL_HOST_USER
+EMAIL_ADMIN = EMAIL_HOST_USER
+
+AUTH_USER_MODEL = "users.User" # in order to avoid error while applying  migrations after we created (class User(AbstractUser):) in users.models, we need to add this line
+# by default it looks like this "auth.User", but because we replace it by our own, the path changes
+# while applying migrations there will be an error, so i have to delete all migrations from all the apps and reapply them again
+
+DEFAULT_USER_IMAGE = MEDIA_URL + 'users/default.png' # we defined default url link for our photo profile ( also changes in profile.html and ProfileUser)

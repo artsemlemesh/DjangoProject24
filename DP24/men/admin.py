@@ -71,3 +71,4 @@ class CategoryAdmin(admin.ModelAdmin):
     list_display = ('id', 'name')
     list_display_links = ('id', 'name')
 #admin.site.register(Category, CategoryAdmin)
+    prepopulated_fields = {'slug':('name', )} # creates slug on the go while typing title filed

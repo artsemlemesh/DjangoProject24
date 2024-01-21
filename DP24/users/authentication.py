@@ -9,7 +9,7 @@ class EmailAuthBackend(BaseBackend):#after creating this backend and connecting 
 
         try:
             user = user_model.objects.get(email=username)
-            if user.check_password(password):#check_password is a buit in method for checking passwords
+            if user.check_password(password):#check_password is a built-in method for checking passwords
                 return user
             return None
         except (user_model.DoesNotExist, user_model.MultipleObjectsReturned):

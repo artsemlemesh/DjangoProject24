@@ -33,6 +33,7 @@ class Men(models.Model):
     # m.cat (sql request) will return <Category: acters>/ m.cat.name or m.cat.slug will return name and slug of a category model respectively
     # m.cat_id (no sql, just number returns) will return 1 - id of the category that this post belongs to
     author = models.ForeignKey(get_user_model(), on_delete=models.SET_NULL, related_name='posts', null=True, default=None) #field 'author' connects a certain article with an author who created it #SET_NULL-if we delete author then its articles will have Null,
+
     objects = models.Manager()
     published = PublishManager()
     def __str__(self):
@@ -42,7 +43,7 @@ class Men(models.Model):
         verbose_name = 'Famous men' # changes the name of the class in django admin panel
         verbose_name_plural = 'Famous men' # to remove letter s at the end of the word in django admin panel
         ordering = ['-time_created'] #returns posts after sorting it by time
-        indexes = [models.Index(fields=['-time_created'])]
+        indexes = [models.Index(fields=['-time_created'])]#the same as db_index(use on fields that are frequently used for filtering or sorting
 
     def get_absolute_url(self):
         return reverse('post', kwargs={'post_slug': self.slug}) # key post_slug we take from urls where <slug:post_slug>
@@ -60,7 +61,7 @@ class Category(models.Model):
 # c.men_set.all() - returns all the posts related to the category
 # if in the field cat we add related_name='posts', then c.men_set.all() == c.posts.all()
 # we use __ for lookups like Category.objects.filter(pk__gte=1) and also to refer to a field of another model: Men.objects.filter(cat__slug='singers')
-# Category.objects.annotate(total=Count('posts')) #returns Category table with extra temperary column "total", reverse linking accesses related_name='posts' from Men class
+# Category.objects.annotate(total=Count('posts')) #returns Category table with extra temporary column "total", reverse linking accesses related_name='posts' from Men class
 # c = Category.objects.annotate(total=Count('posts')).filter(total__gt=1) # returns categories that have more than one post
     def __str__(self):
         return self.name

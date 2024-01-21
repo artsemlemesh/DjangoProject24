@@ -139,7 +139,7 @@ MEDIA_URL = '/media/'#to display pictures
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
-# LOGIN_REDIRECT_URL = url redirect after successfull authorization
+# LOGIN_REDIRECT_URL = url redirect after successful authorization
 # LOGIN_URL = url redirect of an unauthorized user in an attempt to visit restricted page
 # LOGOUT_REDIRECT_URL = url on which user is redirected after being logged in
 

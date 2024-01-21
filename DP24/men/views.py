@@ -56,7 +56,7 @@ class MenHome(DataMixin, ListView): # CBV version of function based index view
 
     def get_context_data(self, **kwargs): #for dynamic data
         context = super().get_context_data(**kwargs)
-        context['cat_selected'] = int(self.request.GET.get('cat_id', 0)) #adds dynamicly changed category, from the address line
+        context['cat_selected'] = int(self.request.GET.get('cat_id', 0)) #adds dynamically changed category, from the address line
         return context
 
 
@@ -78,7 +78,7 @@ class ShowPost(DataMixin, DetailView): #added mixin DataMixin
     model = Men
     template_name = 'post.html'
     slug_url_kwarg = 'post_slug' # we have to define this field, or else error, because slug: post_slug is a custom name, if it was pk or slug then would be ok
-    # pk_url_kwarg = #define if we search by pk, but we use slug so we dont need this field
+    # pk_url_kwarg = #define if we search by pk, but we use slug so we don't need this field
     context_object_name = 'post' # in detail view by default uses name 'object'
 
     def get_context_data(self, **kwargs):# to add title to our page, we need to customize this method
@@ -101,7 +101,7 @@ class ShowPost(DataMixin, DetailView): #added mixin DataMixin
 #     if request.method == 'POST':
 #         form = UploadFileForm(request.POST, request.FILES)# because we upload files we need to write FILES here
 #         # handle_uploaded_file(request.FILES['file_upload']) #key file_upload appeared because we defined the class='file_upload' in our html template about.html /name is our key:     <p><input type="file" name="file_upload"></p>
-#         if form.is_valid(): # checks wheter the fields are correct
+#         if form.is_valid(): # checks whether the fields are correct
 #             # handle_uploaded_file(form.cleaned_data['file']) # file is the name of the field in the UploadFileForm//now we comment it because we upload via models and use different class for it
 #             fp = UploadFiles(file=form.cleaned_data['file'])
 #             fp.save()#these two lines fp replaced the function: handle_uploaded_file # formbased upload replaced by modelbased upload
@@ -148,10 +148,11 @@ class AddPage(PermissionRequiredMixin, LoginRequiredMixin, DataMixin, CreateView
     template_name = 'addpage.html'
     #in CreateView we can remove success_url then it will use get_absolute_url from models, but we should determine it in advance
     success_url = reverse_lazy('index')# the same as reverse, builds the url only when its necessary, not immediately like function reverse does. it helps to avoid errors
-    #to add menu fields we need extra_context
+
     title_page = 'add article' #this line defined in mixins, put it here instead of extra_context
     permission_required = 'men.add_men'#<app>.<action>_<table> # 'men'-name of the application, '.', 'add'-permission itself. 'men'-name of the table that permission is connected with
     #login_url = '/admin/'#after we added LoginRequiredMixin, we have this attribute, once user clicked on the restricted page, he will be redirected to the specified page
+    # to add menu fields we need extra_context
     # extra_context = {
     #     'menu': menu,
     #     'title': 'add article'
@@ -176,7 +177,7 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
     model = Men
     fields = ['title', 'content', 'photo', 'is_published', 'cat']
     template_name = 'addpage.html'
-    success_url = reverse_lazy('index')
+    success_url = reverse_lazy('index')#reverse_lazy delays url resolution until it is actually needed
     title_page = 'edit article'
     permission_required = 'men.change_men'
     # extra_context = {
@@ -187,7 +188,7 @@ class UpdatePage(PermissionRequiredMixin, DataMixin, UpdateView):
 class DeletePage(DeleteView):
     model = Men
     success_url = reverse_lazy('index')
-    template_name = 'men_confirm_delete.html'#after deleting an article it requires confirmation, which is located on this address
+    template_name = 'men_confirm_delete.html'#after deleting an article it requires confirmation, which is located on this address/buitl-in template
 
 
 # class AddPage(View):#addpage but class based view # later it is replaced by FormView
@@ -235,7 +236,7 @@ def login(request):
 class MenCategory(DataMixin, ListView): # class based view of show_category
     template_name = 'index.html'
     context_object_name = 'posts'
-    allow_empty = False # list  posts' in cat in get_context_data. is empty then 404/ if wrong slug then 404
+    allow_empty = False # list  posts' in cat in get_context_data. if empty then 404/ if wrong slug then 404
 
     def get_queryset(self):
         return Men.published.filter(cat__slug=self.kwargs['cat_slug']).select_related('cat')#cat_slug came from urls <slug:cat_slug>

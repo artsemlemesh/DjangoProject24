@@ -15,7 +15,7 @@ urlpatterns = [
     path('post/<slug:post_slug>', views.ShowPost.as_view(), name='post'),
     path('category/<slug:cat_slug>', views.MenCategory.as_view(), name='category'),
     path('tag/<slug:tag_slug>', views.TagPostList.as_view(), name='tag'),
-    path('edit/<int:pk>/', views.UpdatePage.as_view(), name='edit_page'),#we can use <slug:slug> to edit by slug
+    path('edit/<slug:slug>/', views.UpdatePage.as_view(), name='edit_page'),#we can use <slug:slug> to edit by slug or <int:pk> to edit by id
     path('delete/<int:pk>/', views.DeletePage.as_view(), name='delete_page'),
 ]
 

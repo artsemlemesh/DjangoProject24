@@ -1,6 +1,13 @@
 {% extends 'base.html' %}
 
 {% block breadcrumbs %}<!-- ths  block displays all the tags that current post belongs to-->
+
+<!--this block shows button edit page to those users, who have permission change in a table women-->
+{% if perms.men.change_men %}
+<p><a href="{% url 'edit_page' post.slug %}">edit page</a></p>
+{% endif %}
+<!--end of permission block-->
+
 <!--tags-->
 {% with post.tags.all as tags %} <!-- post.tags.all retrieves all the tags associated with the current post instance through the relationship established between the Men and TagPost models -->
 {% if tags %}

@@ -26,7 +26,8 @@ SECRET_KEY = "django-insecure-gpgxu#%d@$6uiv=f&id6%%$qvwk%!5b5rt9=rh%b8-60+not2h
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = ['127.0.0.1']
+ALLOWED_HOSTS = ['localhost',
+                 '127.0.0.1']
 INTERNAL_IPS = ['127.0.0.1']
 
 
@@ -43,13 +44,14 @@ INSTALLED_APPS = [
     'django_extensions',
 
     'debug_toolbar',
-
+    'gunicorn',
     'men',
     'users', #app for authentication
 ]
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware", #middleware for handling staticfiles in production
     "django.contrib.sessions.middleware.SessionMiddleware",#important for authentication
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
@@ -58,6 +60,10 @@ MIDDLEWARE = [
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
     "debug_toolbar.middleware.DebugToolbarMiddleware",
 ]
+STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage" #Want forever-cacheable files and compression support? Just add this to your settings.py:
+
+
+
 
 ROOT_URLCONF = "DP24.urls"
 
@@ -130,6 +136,7 @@ STATIC_URL = "static/"
 STATICFILES_DIRS = [
     BASE_DIR / 'static'
 ]
+STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 MEDIA_ROOT = BASE_DIR / 'media' #creates one directory for all the media files , instead of two directories 'uploads'-forms upload and 'upload_models'-model upload, we have 'media' for any files and ways of upload
 MEDIA_URL = '/media/'#to display pictures
@@ -164,7 +171,7 @@ EMAIL_HOST_USER = 'artem.lems@yandex.ru'
 EMAIL_HOST_PASSWORD = 'ceflmpevwhymjkys'
 EMAIL_USE_SSL = True
 
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER#this line is important for sending messages such as password reset(doesnt work without it)
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER #this line is important for sending messages such as password reset(doesnt work without it)
 SERVER_EMAIL = EMAIL_HOST_USER
 EMAIL_ADMIN = EMAIL_HOST_USER
 
